@@ -18,19 +18,36 @@ class EngineersRecyclerViewAdapter(
     }
 
     override fun onBindViewHolder(holder: EngineerViewHolder, position: Int) {
-        holder.bind(engineers[position], onClick)
+
+        // here i will sort all engineers by the years in an ascending order
+        val sortedEngineers= engineers.sortedBy { it.quickStats.years }
+
+        holder.bind(sortedEngineers[position], onClick)
+
+     //   holder.bind(engineers[position], onClick)
+
     }
 
     inner class EngineerViewHolder(private val binding: ItemEngineerBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(engineer: Engineer, onClick: (Engineer) -> Unit) {
+
             binding.name.text = engineer.name
             binding.role.text = engineer.role
+
             binding.root.setOnClickListener {
                 onClick(engineer)
             }
+            if ( engineer.defaultImageName.isNotEmpty()) {
+
+                // image name will hold image uri from the phone Gallery
+              //  binding.profileImage.setImageDrawable() = engineer.defaultImageName
+                //   profileView.image = engineer.defaultImageName
+            }
+
+
             //TODO - set profile picture
-//            statusIcon.setDrawable(item.icon)
+       //    statusIcon.setDrawable(item.icon)
         }
     }
 }
