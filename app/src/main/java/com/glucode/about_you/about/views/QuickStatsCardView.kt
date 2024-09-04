@@ -4,44 +4,39 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.cardview.widget.CardView
-import androidx.core.content.ContextCompat
 import com.glucode.about_you.R
-import com.glucode.about_you.databinding.ViewQuickstatsCardBinding
+import com.glucode.about_you.databinding.ViewQuickStatsCardBinding
 
-class QuickStatsCardView  @JvmOverloads constructor (
+class QuickStatsCardView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : CardView(context, attrs, defStyleAttr)  {
+) : CardView(context, attrs, defStyleAttr) {
+    private val binding: ViewQuickStatsCardBinding =
+        ViewQuickStatsCardBinding.inflate(LayoutInflater.from(context), this)
 
-    private val binding: ViewQuickstatsCardBinding =
-        ViewQuickstatsCardBinding.inflate(LayoutInflater.from(context), this)
+    init{
+        radius = resources.getDimension(R.dimen.corner_radius_large)
+        elevation = resources.getDimension(R.dimen.elevation_normal)
+    }
 
-    var yearsNumber: String? = null
+    var years: String? = null
         set(value) {
             field = value
             binding.years.text = value
         }
 
-    var coffeesNumber: String? = null
+    var coffees: String? = null
         set(value) {
             field = value
-            binding.coffeesNumber.text = value
+            binding.coffees.text = value
         }
 
-    var bugsNumber: String? = null
+    var bugs: String? = null
         set(value) {
             field = value
-            binding.bugsNumber.text = value
+            binding.bugs.text = value
         }
 
-
-
-    init {
-        radius = resources.getDimension(R.dimen.corner_radius_normal)
-        elevation = resources.getDimension(R.dimen.elevation_normal)
-        setCardBackgroundColor(ContextCompat.getColor(context, R.color.white))
-
-    }
 
 }

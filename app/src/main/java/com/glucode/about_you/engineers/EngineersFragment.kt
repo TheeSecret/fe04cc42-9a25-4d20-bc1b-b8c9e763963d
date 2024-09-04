@@ -5,6 +5,8 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
+import com.glucode.about_you.EngineersViewModel
+import com.glucode.about_you.MainActivity
 import com.glucode.about_you.R
 import com.glucode.about_you.databinding.FragmentEngineersBinding
 import com.glucode.about_you.engineers.models.Engineer
@@ -13,6 +15,8 @@ import com.glucode.about_you.mockdata.MockData
 class EngineersFragment : Fragment() {
     private lateinit var binding: FragmentEngineersBinding
 
+    lateinit var viewModel: EngineersViewModel
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -20,8 +24,17 @@ class EngineersFragment : Fragment() {
     ): View {
         binding = FragmentEngineersBinding.inflate(inflater, container, false)
         setHasOptionsMenu(true)
-        setUpEngineersList(MockData.engineers)
+
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel = (activity as MainActivity).viewModel
+
+        viewModel.engineers.observe(viewLifecycleOwner) { engineers ->
+            setUpEngineersList(engineers)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

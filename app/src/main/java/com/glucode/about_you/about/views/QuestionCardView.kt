@@ -18,6 +18,13 @@ class QuestionCardView @JvmOverloads constructor(
     private val binding: ViewQuestionCardBinding =
         ViewQuestionCardBinding.inflate(LayoutInflater.from(context), this)
 
+
+    /**
+     * Getter for title TextView
+     * this will make binding available to testing class
+     */
+    fun questionCardViewBinding() = binding
+
     var title: String? = null
         set(value) {
             field = value

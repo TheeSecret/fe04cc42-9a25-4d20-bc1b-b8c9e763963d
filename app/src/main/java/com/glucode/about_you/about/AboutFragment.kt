@@ -1,20 +1,25 @@
 package com.glucode.about_you.about
 
 import android.os.Bundle
-import android.provider.ContactsContract.Profile
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import com.glucode.about_you.MainActivity
+import com.glucode.about_you.EngineersViewModel
 import com.glucode.about_you.about.views.ProfileCardView
 import com.glucode.about_you.about.views.QuestionCardView
-import com.glucode.about_you.about.views.QuickStatsCardView
 import com.glucode.about_you.databinding.FragmentAboutBinding
 import com.glucode.about_you.engineers.models.Engineer
-import com.glucode.about_you.mockdata.MockData
 
 class AboutFragment: Fragment() {
     private lateinit var binding: FragmentAboutBinding
+
+    private lateinit var viewModel: EngineersViewModel
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -23,17 +28,26 @@ class AboutFragment: Fragment() {
     ): View {
         binding = FragmentAboutBinding.inflate(inflater, container, false)
         return binding.root
+
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel = (activity as MainActivity).viewModel
+
         val engineerName = arguments?.getString("name")
 
-        val engineer = MockData.engineers.first { it.name == engineerName }
+        viewModel.engineers.observe(viewLifecycleOwner, Observer {
+            engineers ->
+            (activity as MainActivity).selectedEngineer = (engineers.first{ it.name == engineerName }).name
+            setUpProfile(engineers.first{ it.name == engineerName })
+            setUpQuestions(engineers.first{ it.name == engineerName })
+        })
 
-        setUpProfile(engineer)
-        setUpQuestions(engineer)
+
+
     }
 
     private fun setUpQuestions(engineer: Engineer) {
@@ -49,30 +63,19 @@ class AboutFragment: Fragment() {
     }
 
     private fun setUpProfile(engineer : Engineer){
-        val profileView = ProfileCardView(requireContext())
+        val profileView = ProfileCardView((activity as MainActivity), requireContext())
 
-        if ( engineer.defaultImageName.isNotEmpty()) {
-     //   profileView.image = engineer.defaultImageName
-         }
+        profileView.defaultImageName = engineer.defaultImageName
+        profileView.name = engineer.name
+        profileView.role = engineer.role
 
-          profileView.name = engineer.name
-          profileView.role = engineer.role
+        profileView.quickstats = engineer.quickStats
 
+
+        binding.container.removeAllViews()
         binding.container.addView(profileView)
     }
 
-
-     private fun setUpQuickStats(engineer : Engineer){
-         val quickStatsView = QuickStatsCardView(requireContext())
-
-
-            quickStatsView.bugsNumber = engineer.quickStats.bugs.toString()
-            quickStatsView.coffeesNumber = engineer.quickStats.coffees.toString()
-            quickStatsView.yearsNumber = engineer.quickStats.toString()
-
-
-         binding.container.addView(quickStatsView )
-     }
 
 
 

@@ -1,11 +1,14 @@
 package com.glucode.about_you.about.views
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.annotation.ColorInt
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
+import com.glucode.about_you.ImagePickerHandler
 import com.glucode.about_you.R
 import com.glucode.about_you.databinding.ViewAnswerCardBinding
 
@@ -22,6 +25,13 @@ class AnswerCardView @JvmOverloads constructor(
     private val selectedTextColor: Int
     @ColorInt
     private val deselectedTextColor: Int
+
+
+    /**
+     * Getter for title TextView
+     * this will make tittle available to testing class
+     */
+    fun getTitleTextView() = binding.title
 
     var title: String? = null
         set(value) {
@@ -49,5 +59,10 @@ class AnswerCardView @JvmOverloads constructor(
             setCardBackgroundColor(null)
             binding.title.setTextColor(deselectedTextColor)
         }
+
+
+
     }
+
+
 }
