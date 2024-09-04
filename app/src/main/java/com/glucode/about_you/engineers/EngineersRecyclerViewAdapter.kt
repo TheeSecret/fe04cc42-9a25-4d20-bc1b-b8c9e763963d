@@ -23,9 +23,9 @@ class EngineersRecyclerViewAdapter(
     override fun onBindViewHolder(holder: EngineerViewHolder, position: Int) {
 
         // here i will sort all engineers by the years in an ascending order
-        val sortedEngineers= engineers.sortedBy { it.quickStats.years }
+       // val sortedEngineers= engineers.sortedBy { it.quickStats.years }
 
-        holder.bind(sortedEngineers[position], onClick)
+        holder.bind(engineers[position], onClick)
 
      //   holder.bind(engineers[position], onClick)
 

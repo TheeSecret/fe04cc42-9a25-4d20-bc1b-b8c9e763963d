@@ -5,12 +5,14 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.RecyclerView
 import com.glucode.about_you.EngineersViewModel
 import com.glucode.about_you.MainActivity
 import com.glucode.about_you.R
 import com.glucode.about_you.databinding.FragmentEngineersBinding
 import com.glucode.about_you.engineers.models.Engineer
 import com.glucode.about_you.mockdata.MockData
+import com.glucode.about_you.mockdata.MockData.engineers
 
 class EngineersFragment : Fragment() {
     private lateinit var binding: FragmentEngineersBinding
@@ -35,6 +37,8 @@ class EngineersFragment : Fragment() {
         viewModel.engineers.observe(viewLifecycleOwner) { engineers ->
             setUpEngineersList(engineers)
         }
+
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -43,13 +47,26 @@ class EngineersFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.action_years) {
+
+
+       val sortedEngineers = when(item.itemId ) {
+
+           R.id.action_years -> engineers.sortedBy { it.quickStats.years }
+           R.id.action_bugs -> engineers.sortedBy { it.quickStats.bugs }
+           R.id.action_coffees -> engineers.sortedBy { it.quickStats.coffees }
+           else -> return super.onOptionsItemSelected(item)
+       }
+        // Update the RecyclerView with the sorted list
+        setUpEngineersList(sortedEngineers)
+
             return true
-        }
-        return super.onOptionsItemSelected(item)
+
     }
 
     private fun setUpEngineersList(engineers: List<Engineer>) {
+
+
+
         binding.list.adapter = EngineersRecyclerViewAdapter(engineers) {
             goToAbout(it)
         }
@@ -62,5 +79,11 @@ class EngineersFragment : Fragment() {
             putString("name", engineer.name)
         }
         findNavController().navigate(R.id.action_engineersFragment_to_aboutFragment, bundle)
+
     }
+
+
+
+
+
 }
