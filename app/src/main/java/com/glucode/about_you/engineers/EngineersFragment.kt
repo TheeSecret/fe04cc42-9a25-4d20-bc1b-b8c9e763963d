@@ -5,13 +5,11 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.RecyclerView
 import com.glucode.about_you.EngineersViewModel
 import com.glucode.about_you.MainActivity
 import com.glucode.about_you.R
 import com.glucode.about_you.databinding.FragmentEngineersBinding
 import com.glucode.about_you.engineers.models.Engineer
-import com.glucode.about_you.mockdata.MockData
 import com.glucode.about_you.mockdata.MockData.engineers
 
 class EngineersFragment : Fragment() {

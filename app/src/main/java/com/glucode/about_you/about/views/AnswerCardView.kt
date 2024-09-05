@@ -1,14 +1,11 @@
 package com.glucode.about_you.about.views
 
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.annotation.ColorInt
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
-import com.glucode.about_you.ImagePickerHandler
 import com.glucode.about_you.R
 import com.glucode.about_you.databinding.ViewAnswerCardBinding
 

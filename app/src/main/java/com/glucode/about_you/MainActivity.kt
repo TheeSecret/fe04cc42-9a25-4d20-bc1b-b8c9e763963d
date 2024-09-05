@@ -6,13 +6,10 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
-import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupActionBarWithNavController
-import com.glucode.about_you.mockdata.MockData
+
 
 
 class MainActivity : AppCompatActivity() {
@@ -33,7 +30,10 @@ class MainActivity : AppCompatActivity() {
         return findNavController(R.id.fragment_host).navigateUp() || super.onSupportNavigateUp()
     }
 
+
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+
 
         if (resultCode == Activity.RESULT_OK && data != null) {
 
@@ -69,12 +69,10 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+
         super.onActivityResult(requestCode, resultCode, data)
 
     }
-
-
-
 
 
 }
