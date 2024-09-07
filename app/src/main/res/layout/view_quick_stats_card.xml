@@ -4,7 +4,6 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:padding="@dimen/padding_normal"
     >
 
 
@@ -14,8 +13,10 @@
         android:layout_height="wrap_content"
         android:weightSum="3"
         android:orientation="horizontal"
-
         android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="parent"
         android:background="@color/cardview_grey_background">
         <LinearLayout
             android:layout_width="wrap_content"
@@ -23,7 +24,11 @@
             android:orientation="vertical"
             android:weightSum="2"
             android:gravity="center"
-            android:padding="@dimen/margin_small"
+            android:paddingTop="@dimen/margin_small"
+            android:paddingBottom="@dimen/margin_small"
+            android:paddingLeft="@dimen/margin_normal"
+            android:paddingRight="@dimen/margin_normal"
+
             android:layout_weight="1" >
             <TextView
                 android:layout_width="wrap_content"
@@ -47,7 +52,10 @@
             android:orientation="vertical"
             android:gravity="center"
             android:layout_weight="1"
-            android:padding="@dimen/margin_small"
+            android:paddingTop="@dimen/margin_small"
+            android:paddingBottom="@dimen/margin_small"
+            android:paddingLeft="@dimen/margin_normal"
+            android:paddingRight="@dimen/margin_normal"
             android:weightSum="2">
             <TextView
                 android:layout_width="wrap_content"
@@ -72,7 +80,10 @@
             android:orientation="vertical"
             android:layout_weight="1"
             android:gravity="center"
-            android:padding="@dimen/margin_small"
+            android:paddingTop="@dimen/margin_small"
+            android:paddingBottom="@dimen/margin_small"
+            android:paddingLeft="@dimen/margin_normal"
+            android:paddingRight="@dimen/margin_normal"
             android:weightSum="2">
             <TextView
                 android:layout_width="wrap_content"

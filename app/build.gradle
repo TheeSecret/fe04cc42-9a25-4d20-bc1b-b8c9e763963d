@@ -5,6 +5,8 @@ plugins {
 
 android {
     compileSdk 34
+    namespace "com.glucode.about_you"
+
 
     defaultConfig {
         applicationId "com.glucode.about_you"
