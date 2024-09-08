@@ -10,8 +10,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupActionBarWithNavController
 
-
-
 class MainActivity : AppCompatActivity() {
 
     val viewModel: EngineersViewModel = EngineersViewModel()

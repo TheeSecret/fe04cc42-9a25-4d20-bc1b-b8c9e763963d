@@ -1,9 +1,14 @@
 package com.glucode.about_you.about
 
+import android.app.Activity
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.glucode.about_you.MainActivity
@@ -17,7 +22,46 @@ class AboutFragment: Fragment() {
     private lateinit var binding: FragmentAboutBinding
 
     private lateinit var viewModel: EngineersViewModel
+    var selectedEngineer : String = ""
+    val MY_REQUEST_CODE =123
 
+    val activityResultsLucher= registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
+
+        if (result.resultCode == Activity.RESULT_OK && result?.data != null) {
+
+            when (MY_REQUEST_CODE) {
+                0 -> {
+                    val imageSelected = result?.data!!.extras!!["data"] as Bitmap?
+                    val imageBitMap = imageSelected
+
+                    viewModel.updateEngineerImage(selectedEngineer, imageBitMap)
+
+                }
+
+                1 -> {
+                    val imageSelected = result.data!!.data
+                    val pathColumn = arrayOf(MediaStore.Images.Media.DATA)
+                    if (imageSelected != null) {
+                        val myCursor = requireContext().contentResolver.query(
+                            imageSelected,
+                            pathColumn, null, null, null
+                        )
+                        if (myCursor != null) {
+                            myCursor.moveToFirst()
+                            val columnIndex = myCursor.getColumnIndex(pathColumn[0])
+                            val picturePath = myCursor.getString(columnIndex)
+                            myCursor.close()
+                            val imageBitMap =  BitmapFactory.decodeFile(picturePath)
+
+                            viewModel.updateEngineerImage(selectedEngineer, imageBitMap)
+
+                        }
+                    }
+                }
+            }
+        }
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,7 +89,6 @@ class AboutFragment: Fragment() {
         })
 
 
-
     }
 
     private fun setUpQuestions(engineer: Engineer) {
@@ -60,6 +103,7 @@ class AboutFragment: Fragment() {
         }
     }
 
+
     private fun setUpProfile(engineer : Engineer){
         val profileView = ProfileCardView((activity as MainActivity), requireContext())
 
@@ -69,15 +113,9 @@ class AboutFragment: Fragment() {
 
         profileView.quickstats = engineer.quickStats
 
-
         binding.container.removeAllViews()
         binding.container.addView(profileView)
     }
-
-
-
-
-
 
 
 

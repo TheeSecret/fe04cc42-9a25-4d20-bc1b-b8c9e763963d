@@ -13,6 +13,7 @@ import android.widget.ImageView
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import com.glucode.about_you.R
+import com.glucode.about_you.about.AboutFragment
 import com.glucode.about_you.databinding.ViewProfileCardBinding
 import com.glucode.about_you.engineers.models.QuickStats
 
@@ -59,8 +60,6 @@ class ProfileCardView @JvmOverloads constructor(
         }
 
 
-
-
     init {
         radius = resources.getDimension(R.dimen.corner_radius_normal)
         elevation = resources.getDimension(R.dimen.elevation_normal)
@@ -72,29 +71,14 @@ class ProfileCardView @JvmOverloads constructor(
     private fun setupImageView(activity: Activity, view: ImageView, imageSelected:Bitmap?)
     {
         if(imageSelected != null) {
-            //val uri = concat("@drawable/", imageSelected)
 
-            //val imageResource = resources.getIdentifier(uri.toString(), null, context.packageName)
-            //val res = resources.getDrawable(imageResource)
             view.setImageBitmap(imageSelected)
-
 
         }
         view.setOnClickListener { onImageClick(activity, view) }
     }
-    private fun onImageClick(activity: Activity, view: ImageView){
-        selectImage(activity )
-    }
+    fun onImageClick(activity: Activity, view: ImageView){
 
-    fun selectImage(activity: Activity) {
-
-        val choice = arrayOf<CharSequence>("Take Photo", "Choose from Gallery", "Cancel")
-        val myAlertDialog: AlertDialog.Builder = AlertDialog.Builder(context)
-        myAlertDialog.setTitle("Select Image")
-        myAlertDialog.setItems(choice, DialogInterface.OnClickListener { dialog, item ->
-
-            when {
-                choice[item] == "Choose from Gallery" -> {
                     val pickFromGallery = Intent(
                         Intent.ACTION_GET_CONTENT,
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI
@@ -103,20 +87,9 @@ class ProfileCardView @JvmOverloads constructor(
                     }
 
                     activity.startActivityForResult(pickFromGallery, 1)
-                }
 
-                choice[item] == "Take Photo" -> {
-                    val cameraPicture = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                    activity.startActivityForResult(cameraPicture, 0)
-                }
-
-                choice[item] == "Cancel" -> {
-                    dialog.dismiss()
-                }
-            }
-        })
-        myAlertDialog.show()
     }
+
 
     private fun setUpQuickStats(context: Context,years :String? , coffees :String?, bugs : String?){
         val quickStatsCardView = QuickStatsCardView(context)
