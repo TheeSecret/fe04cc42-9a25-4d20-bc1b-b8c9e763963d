@@ -31,11 +31,9 @@ class EngineersFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = (activity as MainActivity).viewModel
-
         viewModel.engineers.observe(viewLifecycleOwner) { engineers ->
             setUpEngineersList(engineers)
         }
-
 
     }
 
@@ -79,9 +77,6 @@ class EngineersFragment : Fragment() {
         findNavController().navigate(R.id.action_engineersFragment_to_aboutFragment, bundle)
 
     }
-
-
-
 
 
 }

@@ -8,7 +8,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 class MainActivity : AppCompatActivity() {
 
     val viewModel: EngineersViewModel = EngineersViewModel()
-    var selectedEngineer : String = ""
+   // var selectedEngineer : String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

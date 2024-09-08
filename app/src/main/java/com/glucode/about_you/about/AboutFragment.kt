@@ -1,5 +1,4 @@
 package com.glucode.about_you.about
-
 import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
@@ -28,6 +27,9 @@ class AboutFragment: Fragment() {
     var REQUEST_CODE_PERMISSIONS =1001
     // Declare a URI to store the image
     private lateinit var imageUri: Uri
+
+    //val viewModel: EngineersViewModel = EngineersViewModel()
+    var selectedEngineer : String = ""
 
 
     // Declare the launcher
@@ -61,7 +63,7 @@ class AboutFragment: Fragment() {
 
         viewModel.engineers.observe(viewLifecycleOwner, Observer {
             engineers ->
-            (activity as MainActivity).selectedEngineer = (engineers.first{ it.name == engineerName }).name
+            selectedEngineer = (engineers.first{ it.name == engineerName }).name
             setUpProfile(engineers.first{ it.name == engineerName })
             setUpQuestions(engineers.first{ it.name == engineerName })
         })
@@ -127,6 +129,5 @@ class AboutFragment: Fragment() {
          return false
 
     }
-
 
 }
