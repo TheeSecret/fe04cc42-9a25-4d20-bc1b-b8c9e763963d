@@ -19,7 +19,6 @@ import com.glucode.about_you.engineers.models.QuickStats
 
 
 class ProfileCardView @JvmOverloads constructor(
-    activityT: Activity,
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
@@ -31,12 +30,11 @@ class ProfileCardView @JvmOverloads constructor(
 
 
     private var profileImageView: ImageView = binding.profileImage
-    private lateinit var activity: Activity
 
     var defaultImageName: Bitmap? = null
         set(value) {
             field = value
-            setupImageView(activity ,profileImageView, defaultImageName)
+          if (defaultImageName !=null )  profileImageView.setImageBitmap(value)
 
         }
 
@@ -60,43 +58,21 @@ class ProfileCardView @JvmOverloads constructor(
         }
 
 
+    var onImageClick : () -> Unit = {}
+
     init {
         radius = resources.getDimension(R.dimen.corner_radius_normal)
         elevation = resources.getDimension(R.dimen.elevation_normal)
         setCardBackgroundColor(ContextCompat.getColor(context, R.color.black))
-        activity = activityT
+        binding.profileImage.setOnClickListener { onImageClick() }
 
     }
-
-    private fun setupImageView(activity: Activity, view: ImageView, imageSelected:Bitmap?)
-    {
-        if(imageSelected != null) {
-
-            view.setImageBitmap(imageSelected)
-
-        }
-        view.setOnClickListener { onImageClick(activity, view) }
-    }
-    fun onImageClick(activity: Activity, view: ImageView){
-
-                    val pickFromGallery = Intent(
-                        Intent.ACTION_GET_CONTENT,
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-                    ).apply {
-                        type = "image/*"
-                    }
-
-                    activity.startActivityForResult(pickFromGallery, 1)
-
-    }
-
 
     private fun setUpQuickStats(context: Context,years :String? , coffees :String?, bugs : String?){
         val quickStatsCardView = QuickStatsCardView(context)
         quickStatsCardView.years=years
         quickStatsCardView.coffees=coffees
         quickStatsCardView.bugs=bugs
-
 
         binding.container.addView(quickStatsCardView)
     }

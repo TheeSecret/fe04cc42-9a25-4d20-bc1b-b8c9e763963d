@@ -1,13 +1,19 @@
 package com.glucode.about_you.about
 
 import android.app.Activity
+import android.app.AlertDialog
+import android.content.DialogInterface
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -22,46 +28,21 @@ class AboutFragment: Fragment() {
     private lateinit var binding: FragmentAboutBinding
 
     private lateinit var viewModel: EngineersViewModel
-    var selectedEngineer : String = ""
-    val MY_REQUEST_CODE =123
 
-    val activityResultsLucher= registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
+    // Declare the launcher
+    private val imagePickerLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        uri?.let {
 
-        if (result.resultCode == Activity.RESULT_OK && result?.data != null) {
+            val engineerName = arguments?.getString("name")
+            // Convert the URI to a Bitmap
+            val bitmap = getBitmapFromUri(uri)
+            viewModel.updateEngineerImage(engineerName.toString(),bitmap)
 
-            when (MY_REQUEST_CODE) {
-                0 -> {
-                    val imageSelected = result?.data!!.extras!!["data"] as Bitmap?
-                    val imageBitMap = imageSelected
+          //  Toast.makeText(requireContext(), engineerName, Toast.LENGTH_LONG).show()
 
-                    viewModel.updateEngineerImage(selectedEngineer, imageBitMap)
-
-                }
-
-                1 -> {
-                    val imageSelected = result.data!!.data
-                    val pathColumn = arrayOf(MediaStore.Images.Media.DATA)
-                    if (imageSelected != null) {
-                        val myCursor = requireContext().contentResolver.query(
-                            imageSelected,
-                            pathColumn, null, null, null
-                        )
-                        if (myCursor != null) {
-                            myCursor.moveToFirst()
-                            val columnIndex = myCursor.getColumnIndex(pathColumn[0])
-                            val picturePath = myCursor.getString(columnIndex)
-                            myCursor.close()
-                            val imageBitMap =  BitmapFactory.decodeFile(picturePath)
-
-                            viewModel.updateEngineerImage(selectedEngineer, imageBitMap)
-
-                        }
-                    }
-                }
-            }
         }
-
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -70,7 +51,6 @@ class AboutFragment: Fragment() {
     ): View {
         binding = FragmentAboutBinding.inflate(inflater, container, false)
         return binding.root
-
 
     }
 
@@ -98,14 +78,13 @@ class AboutFragment: Fragment() {
             questionView.title = question.questionText
             questionView.answers = question.answerOptions
             questionView.selection = question.answer.index
-
             binding.container.addView(questionView)
         }
     }
 
 
     private fun setUpProfile(engineer : Engineer){
-        val profileView = ProfileCardView((activity as MainActivity), requireContext())
+        val profileView = ProfileCardView(requireContext())
 
         profileView.defaultImageName = engineer.defaultImageName
         profileView.name = engineer.name
@@ -113,10 +92,27 @@ class AboutFragment: Fragment() {
 
         profileView.quickstats = engineer.quickStats
 
+        profileView.onImageClick = { onImageClick()}
+
         binding.container.removeAllViews()
         binding.container.addView(profileView)
     }
 
+    fun onImageClick() {
+        // Launch the image picker
+        imagePickerLauncher.launch("image/*")
 
+    }
+
+    // Helper function to get Bitmap from URI
+    private fun getBitmapFromUri(uri: Uri): Bitmap? {
+        return try {
+            val inputStream =  requireContext().contentResolver.openInputStream(uri)
+            BitmapFactory.decodeStream(inputStream)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
 
 }

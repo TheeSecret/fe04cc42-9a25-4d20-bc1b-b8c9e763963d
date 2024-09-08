@@ -17,7 +17,6 @@ class ImagePickerContract : ActivityResultContract<Unit, Uri?>(){
             type = "image/*"
         }
 
-
     }
 
     override fun parseResult(resultCode: Int, intent: Intent?): Uri? {

@@ -29,49 +29,5 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-
-
-        if (resultCode == Activity.RESULT_OK && data != null) {
-
-            when (requestCode) {
-                0 -> {
-                    val imageSelected = data.extras!!["data"] as Bitmap?
-                    val imageBitMap = imageSelected
-
-                    viewModel.updateEngineerImage(selectedEngineer, imageBitMap)
-
-                }
-
-                1 -> {
-                    val imageSelected = data.data
-                    val pathColumn = arrayOf(MediaStore.Images.Media.DATA)
-                    if (imageSelected != null) {
-                        val myCursor = this.contentResolver.query(
-                            imageSelected,
-                            pathColumn, null, null, null
-                        )
-                        if (myCursor != null) {
-                            myCursor.moveToFirst()
-                            val columnIndex = myCursor.getColumnIndex(pathColumn[0])
-                            val picturePath = myCursor.getString(columnIndex)
-                            myCursor.close()
-                            val imageBitMap =  BitmapFactory.decodeFile(picturePath)
-
-                            viewModel.updateEngineerImage(selectedEngineer, imageBitMap)
-
-                        }
-                    }
-                }
-            }
-        }
-
-
-        super.onActivityResult(requestCode, resultCode, data)
-
-    }
-
-
 }
 
