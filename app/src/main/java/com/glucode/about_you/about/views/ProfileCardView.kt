@@ -1,19 +1,13 @@
 package com.glucode.about_you.about.views
 
-import android.app.Activity
-import android.app.AlertDialog
 import android.content.Context
-import android.content.DialogInterface
-import android.content.Intent
 import android.graphics.Bitmap
-import android.provider.MediaStore
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.ImageView
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import com.glucode.about_you.R
-import com.glucode.about_you.about.AboutFragment
 import com.glucode.about_you.databinding.ViewProfileCardBinding
 import com.glucode.about_you.engineers.models.QuickStats
 
@@ -56,7 +50,6 @@ class ProfileCardView @JvmOverloads constructor(
             field = value
             setUpQuickStats(context, quickstats?.years.toString(), quickstats?.coffees.toString(), quickstats?.bugs.toString())
         }
-
 
     var onImageClick : () -> Unit = {}
 

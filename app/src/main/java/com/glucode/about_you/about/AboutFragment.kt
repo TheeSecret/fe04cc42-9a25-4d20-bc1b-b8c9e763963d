@@ -2,20 +2,14 @@ package com.glucode.about_you.about
 
 import android.Manifest
 import android.app.Activity
-import android.app.AlertDialog
-import android.content.DialogInterface
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -32,46 +26,21 @@ class AboutFragment: Fragment() {
     private lateinit var binding: FragmentAboutBinding
     private lateinit var viewModel: EngineersViewModel
     var REQUEST_CODE_PERMISSIONS =1001
+    // Declare a URI to store the image
+    private lateinit var imageUri: Uri
+
 
     // Declare the launcher
     private val galleryLauncher= registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         uri?.let {
-
             val engineerName = arguments?.getString("name")
             // Convert the URI to a Bitmap
             val bitmap = getBitmapFromUri(uri)
             viewModel.updateEngineerImage(engineerName.toString(),bitmap)
 
           //  Toast.makeText(requireContext(), engineerName, Toast.LENGTH_LONG).show()
-
         }
     }
-
-    // Declare the launcher
-    private val cameraLauncher= registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap: Bitmap? ->
-        bitmap?.let {
-            val engineerName = arguments?.getString("name")
-            // Convert the URI to a Bitmap
-           // val bitmap = getBitmapFromUri(uri)
-            viewModel.updateEngineerImage(engineerName.toString(),it)
-
-            //  Toast.makeText(requireContext(), engineerName, Toast.LENGTH_LONG).show()
-
-        }
-    }
-
-/*
-    private val cameraLauncher = fragment.registerForActivityResult(
-        ActivityResultContracts.TakePicturePreview()
-    ) { bitmap: Bitmap? ->
-        bitmap?.let {
-            imageView.setImageBitmap(it)
-        }
-    }
-    */
-
-
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -127,9 +96,10 @@ class AboutFragment: Fragment() {
         binding.container.addView(profileView)
     }
 
-    fun onImageClick() { // Launch the image picker
+    private fun onImageClick() { // Launch the image picker
 
-       galleryLauncher.launch("image/*")
+      if ( checkPermissions())
+      {galleryLauncher.launch("image/*" ) }
 
     }
 
@@ -144,13 +114,18 @@ class AboutFragment: Fragment() {
         }
     }
 
-    fun checkPermissions() {
+    private fun checkPermissions() :Boolean {
         val permissions = arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE)
         val missingPermissions = permissions.filter { ContextCompat.checkSelfPermission(requireContext() as Activity, it) != PackageManager.PERMISSION_GRANTED }
 
         if (missingPermissions.isNotEmpty()) {
             ActivityCompat.requestPermissions(requireContext() as Activity, missingPermissions.toTypedArray(), REQUEST_CODE_PERMISSIONS)
+
+            return true
+
         }
+         return false
+
     }
 
 
