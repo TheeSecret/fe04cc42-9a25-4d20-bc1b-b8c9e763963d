@@ -1,9 +1,11 @@
 package com.glucode.about_you.about
 
+import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -15,6 +17,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.glucode.about_you.MainActivity
@@ -26,11 +30,11 @@ import com.glucode.about_you.engineers.models.Engineer
 
 class AboutFragment: Fragment() {
     private lateinit var binding: FragmentAboutBinding
-
     private lateinit var viewModel: EngineersViewModel
+    var REQUEST_CODE_PERMISSIONS =1001
 
     // Declare the launcher
-    private val imagePickerLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+    private val galleryLauncher= registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         uri?.let {
 
             val engineerName = arguments?.getString("name")
@@ -42,6 +46,31 @@ class AboutFragment: Fragment() {
 
         }
     }
+
+    // Declare the launcher
+    private val cameraLauncher= registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap: Bitmap? ->
+        bitmap?.let {
+            val engineerName = arguments?.getString("name")
+            // Convert the URI to a Bitmap
+           // val bitmap = getBitmapFromUri(uri)
+            viewModel.updateEngineerImage(engineerName.toString(),it)
+
+            //  Toast.makeText(requireContext(), engineerName, Toast.LENGTH_LONG).show()
+
+        }
+    }
+
+/*
+    private val cameraLauncher = fragment.registerForActivityResult(
+        ActivityResultContracts.TakePicturePreview()
+    ) { bitmap: Bitmap? ->
+        bitmap?.let {
+            imageView.setImageBitmap(it)
+        }
+    }
+    */
+
+
 
 
     override fun onCreateView(
@@ -98,9 +127,9 @@ class AboutFragment: Fragment() {
         binding.container.addView(profileView)
     }
 
-    fun onImageClick() {
-        // Launch the image picker
-        imagePickerLauncher.launch("image/*")
+    fun onImageClick() { // Launch the image picker
+
+       galleryLauncher.launch("image/*")
 
     }
 
@@ -114,5 +143,15 @@ class AboutFragment: Fragment() {
             null
         }
     }
+
+    fun checkPermissions() {
+        val permissions = arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE)
+        val missingPermissions = permissions.filter { ContextCompat.checkSelfPermission(requireContext() as Activity, it) != PackageManager.PERMISSION_GRANTED }
+
+        if (missingPermissions.isNotEmpty()) {
+            ActivityCompat.requestPermissions(requireContext() as Activity, missingPermissions.toTypedArray(), REQUEST_CODE_PERMISSIONS)
+        }
+    }
+
 
 }
